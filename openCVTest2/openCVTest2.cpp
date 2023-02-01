@@ -47,7 +47,7 @@ int main()
 		imageContainer.push_back(image); // adds a container for each image
 
 
-		if (!videoCaptureContainer[i].isOpened()) { // error is a port is not available
+		if (!videoCaptureContainer[i].isOpened()) { // error if a port is not available
 			cout << "Camera " << i + 1 << " is not working" << endl;
 			system("pause");
 			return -2;
@@ -75,11 +75,12 @@ int main()
 		if (time(0) - start == (secondsBetweenPictures)) { // triggers the picture capture loop
 
 			auto givePictureName = [counterRoundRobin, counterL, imageContainer]() {
-				imwrite("C:/test/" + to_string(counterL) + "L.png", imageContainer[counterRoundRobin]);
+				imwrite("C:/test/" + to_string(counterL) + "L.png", imageContainer[counterRoundRobin]); // save picture at path
 			};
 			givePictureName();
 
 			counterL++;
+
 			start = start + secondsBetweenPictures; // resets the timer. Needed to take only one picture
 
 			counterRoundRobin++;
