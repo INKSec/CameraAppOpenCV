@@ -1,4 +1,5 @@
 /*
+* C++ 20
 # Imporant
 # only quit program with ESC!
 # Needs Opencv
@@ -8,22 +9,26 @@
 
 
 #include <iostream>
+#include <iomanip>
+#include <ctime>
 #include <opencv2/opencv.hpp>
-#include <time.h>
 #include <windows.h>
+#include <chrono>
+#include <format>
+
 
 using namespace std;
 using namespace cv;
 
-void namingFunction(int);
+
 
 int main()
 {
 	long counterR = 60000, counterL = 60000; // counter to name pictures
 	const int width{ 1280 }, height{ 920 }; // Camera resolution
-	const int secondsBetweenPictures = 10;
+	const int secondsBetweenPictures = 5;
 	const unsigned amountCameras{ 2 };
-	time_t start, end;
+	time_t start;
 	namedWindow("currentCamera");
 	start = time(0);
 	size_t counterRoundRobin{ 0 };
@@ -75,7 +80,13 @@ int main()
 		if (time(0) - start == (secondsBetweenPictures)) { // triggers the picture capture loop
 
 			auto givePictureName = [counterRoundRobin, counterL, imageContainer]() {
-				imwrite("C:/test/" + to_string(counterL) + "L.png", imageContainer[counterRoundRobin]); // save picture at path
+				
+				auto now = std::chrono::system_clock::now(); // get current time
+				now += std::chrono::hours(1); // to correct the current time 
+				string counterRoundRobinForNamning = "Camera_" + to_string(counterRoundRobin);
+				auto timestampFilename = std::format("{:%Y_%m_%d_%H_%M_%OS_}", now) + counterRoundRobinForNamning;
+
+				imwrite("C:/test/" + timestampFilename + ".png", imageContainer[counterRoundRobin]); // save picture at path
 			};
 			givePictureName();
 
@@ -107,5 +118,7 @@ int main()
 
 
 }
+
+// Datum im Dateinamen von gross bis klein
 
 
